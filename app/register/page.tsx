@@ -15,7 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Loader2, CheckCircle, AlertCircle } from "lucide-react";
+import { Loader2, CheckCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
@@ -23,6 +23,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { authApi } from "@/lib/api";
 import { toast } from "@/components/ui/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // Form validation schema
 const registerSchema = z
@@ -30,14 +37,11 @@ const registerSchema = z
     name: z.string().min(2, "Name must be at least 2 characters"),
     mobile: z.string().min(6, "Valid phone number is required"),
     email: z.string().email("Invalid email address"),
-    countryCode: z.string(),
+    country: z.string(),
     dialCode: z.string(),
     position: z.enum(["LEFT", "RIGHT"]),
-    sponsor: z
-      .string()
-      .min(10, "Sponsor code must be exactly 10 characters")
-      .max(10),
-    password: z.string().min(8, "Password must be at least 8 characters"),
+    sponsor: z.string().length(10),
+    password: z.string().min(6, "Password must be at least 6 characters"),
     confirmPassword: z.string(),
     otp: z.string().min(4, "OTP must be at least 4 characters"),
   })
@@ -71,7 +75,7 @@ export default function RegisterPage() {
       name: "",
       mobile: "",
       email: "",
-      countryCode: "+1",
+      country: "",
       dialCode: "1",
       position: "LEFT" as "LEFT" | "RIGHT",
       sponsor: sponsorCode,
@@ -162,6 +166,7 @@ export default function RegisterPage() {
       sponsor: data.sponsor,
       password: data.password,
       otp: data.otp,
+      country: data.country,
     };
 
     register.mutate(registerData);
@@ -191,12 +196,7 @@ export default function RegisterPage() {
                 name="name"
                 control={control}
                 render={({ field }) => (
-                  <Input
-                    id="name"
-                    placeholder="John Doe"
-                    {...field}
-                    error={errors.name?.message}
-                  />
+                  <Input id="name" placeholder="John Doe" {...field} />
                 )}
               />
               {errors.name && (
@@ -265,14 +265,106 @@ export default function RegisterPage() {
 
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="countryCode">Country Code</Label>
+                <Label htmlFor="country" className="text-sm font-medium">
+                  Country <span className="text-red-500">*</span>
+                </Label>
                 <Controller
-                  name="countryCode"
+                  name="country"
                   control={control}
                   render={({ field }) => (
-                    <Input id="countryCode" placeholder="+1" {...field} />
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger id="country">
+                        <SelectValue placeholder="Select a country" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Afghanistan">Afghanistan</SelectItem>
+                        <SelectItem value="Åland Islands">
+                          Åland Islands
+                        </SelectItem>
+                        <SelectItem value="Albania">Albania</SelectItem>
+                        <SelectItem value="Algeria">Algeria</SelectItem>
+                        <SelectItem value="American Samoa">
+                          American Samoa
+                        </SelectItem>
+                        <SelectItem value="Andorra">Andorra</SelectItem>
+                        <SelectItem value="Angola">Angola</SelectItem>
+                        <SelectItem value="Anguilla">Anguilla</SelectItem>
+                        <SelectItem value="Antarctica">Antarctica</SelectItem>
+                        <SelectItem value="Antigua and Barbuda">
+                          Antigua and Barbuda
+                        </SelectItem>
+                        <SelectItem value="Argentina">Argentina</SelectItem>
+                        <SelectItem value="Armenia">Armenia</SelectItem>
+                        <SelectItem value="Aruba">Aruba</SelectItem>
+                        <SelectItem value="Australia">Australia</SelectItem>
+                        <SelectItem value="Austria">Austria</SelectItem>
+                        <SelectItem value="Azerbaijan">Azerbaijan</SelectItem>
+                        <SelectItem value="Bahamas">Bahamas</SelectItem>
+                        <SelectItem value="Bahrain">Bahrain</SelectItem>
+                        <SelectItem value="Bangladesh">Bangladesh</SelectItem>
+                        <SelectItem value="Barbados">Barbados</SelectItem>
+                        <SelectItem value="Belarus">Belarus</SelectItem>
+                        <SelectItem value="Belgium">Belgium</SelectItem>
+                        <SelectItem value="Belize">Belize</SelectItem>
+                        <SelectItem value="Benin">Benin</SelectItem>
+                        <SelectItem value="Bermuda">Bermuda</SelectItem>
+                        <SelectItem value="Bhutan">Bhutan</SelectItem>
+                        <SelectItem value="Bolivia">Bolivia</SelectItem>
+                        <SelectItem value="Bosnia and Herzegovina">
+                          Bosnia and Herzegovina
+                        </SelectItem>
+                        <SelectItem value="Botswana">Botswana</SelectItem>
+                        <SelectItem value="Bouvet Island">
+                          Bouvet Island
+                        </SelectItem>
+                        <SelectItem value="Brazil">Brazil</SelectItem>
+                        <SelectItem value="British Indian Ocean Territory">
+                          British Indian Ocean Territory
+                        </SelectItem>
+                        <SelectItem value="Brunei Darussalam">
+                          Brunei Darussalam
+                        </SelectItem>
+                        <SelectItem value="Bulgaria">Bulgaria</SelectItem>
+                        <SelectItem value="Burkina Faso">
+                          Burkina Faso
+                        </SelectItem>
+                        <SelectItem value="Burundi">Burundi</SelectItem>
+                        <SelectItem value="Cambodia">Cambodia</SelectItem>
+                        <SelectItem value="Cameroon">Cameroon</SelectItem>
+                        <SelectItem value="Canada">Canada</SelectItem>
+                        <SelectItem value="Cape Verde">Cape Verde</SelectItem>
+                        <SelectItem value="Cayman Islands">
+                          Cayman Islands
+                        </SelectItem>
+                        <SelectItem value="Central African Republic">
+                          Central African Republic
+                        </SelectItem>
+                        <SelectItem value="Chad">Chad</SelectItem>
+                        <SelectItem value="Chile">Chile</SelectItem>
+                        <SelectItem value="China">China</SelectItem>
+                        <SelectItem value="Christmas Island">
+                          Christmas Island
+                        </SelectItem>
+                        <SelectItem value="Cocos (Keeling) Islands">
+                          Cocos (Keeling) Islands
+                        </SelectItem>
+                        <SelectItem value="Colombia">Colombia</SelectItem>
+                        <SelectItem value="Comoros">Comoros</SelectItem>
+                        <SelectItem value="Congo">Congo</SelectItem>
+                        <SelectItem value="India">India</SelectItem>
+                        <SelectItem value="United States">
+                          United States
+                        </SelectItem>
+                        {/* More countries would be listed here */}
+                      </SelectContent>
+                    </Select>
                   )}
                 />
+                {errors.country && (
+                  <p className="text-sm text-red-500">
+                    {errors.country.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="dialCode">Dial Code</Label>
@@ -283,6 +375,11 @@ export default function RegisterPage() {
                     <Input id="dialCode" placeholder="1" {...field} />
                   )}
                 />
+                {errors.dialCode && (
+                  <p className="text-sm text-red-500">
+                    {errors.dialCode.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2 col-span-1">
                 <Label htmlFor="mobile">Mobile Number</Label>
