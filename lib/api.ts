@@ -18,7 +18,7 @@ export const authApi = {
     await api.post("/auth/login", data),
 
   registerOtp: (email: string) => api.get(`/auth/get-otp?email=${email}`),
-
+  regerterGetSponserName: (id: string) => api.get(`/auth/sponsor?id=${id}`),
   register: (data: {
     name: string;
     mobile: string;
