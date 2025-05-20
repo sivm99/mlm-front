@@ -1,7 +1,6 @@
 import axios from "axios";
 
-// const API_URL = "https://api.asilocloud.ink/api/v1";
-const API_URL = `${process.env.BACKEND_HOST || "http://localhost:5000"}/api/v1`;
+const API_URL = "https://api.asilocloud.ink/api/v1";
 
 // Create axios instance with credentials
 export const api = axios.create({
